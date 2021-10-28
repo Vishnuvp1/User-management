@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block title %} Login {% endblock %}
+
+
+{% block content %}
+
+<div class="row">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light col-12">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">ADMIN</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+				data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="nav-item">
+						<a class="nav-link active" aria-current="page" href="#">Home</a>
+					</li>
+				</ul>
+				<form class="d-flex">
+					<a href="{% url 'adduser' %}" class="btn btn-outline-dark" style="margin-right: 10px;">ADD USER</a>
+
+					<a class="btn btn-outline-dark" href="{% url 'adminlogout' %}" role="button">LOGOUT</a>
+				</form>
+			</div>
+		</div>
+	</nav>
+</div>
+
+
+
+
+<div class="col-12 mt-5" id="tables">
+	<table class="table table-striped table-bordered table-hover table-responsive bg-white bg-body shadow" id="myTable">
+		<thead>
+			<tr>
+				<th scope="col">No.</th>
+				<th scope="col">Username</th>
+				<th scope="col">First name</th>
+				<th scope="col">Email</th>
+				<th scope="col">Action</th>
+				<th scope="col">Block / Unblock</th>
+			</tr>
+		</thead>
+
+
+		<tbody>
+			{% for user in users %}
+			<tr>
+				<th scope="row"> {{forloop.counter}} </th>
+				<td> {{user.username}} </td>
+				<td> {{user.first_name}} </td>
+				<td> {{user.email}} </td>
+				<td>
+
+
+					<a href="{% url 'update' user.id %}" class="btn btn-outline-secondary"><span
+							class="material-icons">edit</span></a>
+
+
+					<a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+						class="btn btn-outline-secondary">
+						<span class="material-icons"
+							onclick="deleteUser('{{ user.id }}', '{{ user.first_name }}')">delete</span></a>
+
+
+
+				</td>
+				<td>
+
+
+					{% if user.is_active %}
+
+					<a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-sm btn-danger"
+						onclick="blockUser('{{ user.id }}', '{{ user.first_name}}')">Block</a>
+
+					{% else %}
+
+					<a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-sm btn-warning"
+						onclick="unblockUser('{{ user.id }}', '{{ user.first_name }}')">Unblock</a>
+
+					{% endif %}
+
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+	aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<p id="modal-body-content"><span class="text-danger" id="subtext"></span></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<a href="" class="btn btn-danger" id="delete">Delete</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+{% endblock %}
+
+{% block script %}
+<script>
+
+
+	function deleteUser(id, first_name) {
+		document.getElementById("delete").href = '/delete/' + id;
+		document.getElementById('staticBackdropLabel').innerText = 'Delete User';
+		document.getElementById('modal-body-content').innerText = 'Are you sure to delete this , ' + first_name;
+	}
+
+	function blockUser(id, first_name) {
+		document.getElementById("delete").href = '/block-user/' + id;
+		document.getElementById('staticBackdropLabel').innerText = 'Block User';
+		document.getElementById('delete').innerText = 'Block';
+		document.getElementById('modal-body-content').innerText = 'Are you sure to block this , ' + first_name;
+	}
+
+	function unblockUser(id, first_name) {
+		document.getElementById("delete").href = '/unblock-user/' + id;
+		document.getElementById('staticBackdropLabel').innerText = 'Unblock User';
+		document.getElementById('delete').innerText = 'Unblock';
+		document.getElementById('modal-body-content').innerText = 'Are you sure to unblock this , ' + first_name;
+	}
+</script>
+
+{% endblock %}

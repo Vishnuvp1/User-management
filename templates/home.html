@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+
+{% block title %} Home {% endblock %}
+
+
+{% block content %}
+
+<!-- ======= Header ======= -->
+<header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+
+        <h1 class="logo mb-2"><a href="index.html">WELCOME.</a></h1>
+
+
+        <nav id="navbar" class="navbar">
+            <ul>
+
+                <a class="btn btn-outline-light" href="{% url 'logout' %}">LOGOUT</a>
+
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- .navbar -->
+
+    </div>
+</header><!-- End Header -->
+
+<!-- ======= Hero Section ======= -->
+<div id="hero" class="hero route bg-image" style="background-image: url(static/a.jpg)">
+    <div class="overlay-itro"></div>
+    <div class="hero-content display-table">
+        <div class="table-cell">
+            <div class="container">
+                <!--<p class="display-6 color-d">Hello, world!</p>-->
+                <h1 class="hero-title mb-4">GRAYSCALE</h1>
+
+            </div>
+        </div>
+    </div>
+</div><!-- End Hero Section -->
+
+<main id="main">
+
+
+    {% endblock %}

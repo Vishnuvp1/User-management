@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+
+{% block title %} Login {% endblock %}
+
+
+{% block content %}
+
+
+<div class="container">
+    <div class="row content">
+
+        <div class="col-12">
+            <h3 class="signin-text mb-3 text-center">ADMIN - SIGN IN</h3>
+
+            <form action="{% url 'admin-login' %}" method="post" id="login-form">
+                <div class="mainform">
+                    <div class="form-group">
+                        {% csrf_token %}
+                        <label for="username">Username</label>
+                        <input type="text" name="username" class="form-control"><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" class="form-control"><br>
+                    </div>
+                </div>
+
+                <div class="link">
+                    <button type="submit" class="btn btn-primary">Sign In</button>
+                </div>
+
+
+
+                <div>
+                    {% for message in messages %}
+                    <h3 style="color: red; margin-top: 30px"> {{message}} </h3>
+                    {% endfor %}
+                </div>
+
+
+
+            </form>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+
+</style>
+
+{% block script %}
+<script>
+
+    $(document).ready(function () {
+        $("#login-form").validate({
+            rules: {
+                username: {
+                    required: true,
+
+                },
+                password: {
+                    required: true,
+                },
+            }
+        })
+    })
+</script>
+{% endblock %}
+{% endblock %}

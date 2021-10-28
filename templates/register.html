@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+
+{% block title %} Login {% endblock %}
+
+
+{% block content %}
+
+
+<div class="container">
+    <div class="content">
+
+        <div class="col-12">
+            <h3 class="signin-text text-center">SIGN UP</h3>
+
+            <form action="register" method="post" id="login-form">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <div class="mainform">
+
+                        <input type="text" name="first_name" placeholder="First Name" class="form-control"><br>
+                        <input type="text" name="last_name" placeholder="Last Name" class="form-control"><br>
+                        <input type="text" name="username" placeholder="Usernme" class="form-control"><br>
+                        <input type="email" name="email" placeholder="Email" class="form-control"><br>
+                        <input type="password" name="password1" placeholder="Password" class="form-control"><br>
+                        <input type="password" name="password2" placeholder="Confirm Password" class="form-control"><br>
+                    </div>
+                    <div class="link">
+                        <button type="submit" class="btn btn-primary">Sign Up</button>
+
+                    </div>
+                    <div class="backlink mt-4">
+                        Already Registered? <a href="{% url 'login' %}">Sign In</a>
+                    </div>
+                </div>
+
+                <div>
+                    {% for message in messages %}
+                    <h3 style="color: red; margin-top: 30px"> {{message}} </h3>
+                    {% endfor %}
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{% block script %}
+<script>
+
+    $(document).ready(function () {
+        $("#login-form").validate({
+            rules: {
+                first_name: {
+                    required: true,
+
+                },
+                last_name: {
+                    required: true,
+                },
+
+                username: {
+                    required: true,
+                },
+
+                email: {
+                    required: true,
+                },
+
+                password1: {
+                    required: true,
+                },
+
+                password2: {
+                    required: true,
+                },
+            }
+        })
+    })
+</script>
+
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %} Login {% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light col-12">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">ADMIN</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Add User</a>
+                    </li>
+                </ul>
+                <form class="d-flex">
+
+
+                    <a class="btn btn-outline-dark" href="{% url 'admin-dash' %}" role="button">BACK</a>
+                </form>
+            </div>
+        </div>
+    </nav>
+</div>
+
+
+<div class="container">
+    <div class="content">
+
+        <div class="col-12">
+            <h3 class="signin-text text-center">ADD USER</h3>
+
+            <form action="adduser" method="post" id="login-form">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <div class="mainform">
+
+                        <input type="text" name="first_name" placeholder="First Name" class="form-control"><br>
+                        <input type="text" name="last_name" placeholder="Last Name" class="form-control"><br>
+                        <input type="text" name="username" placeholder="Usernme" class="form-control"><br>
+                        <input type="email" name="email" placeholder="Email" class="form-control"><br>
+                        <input type="password" name="password1" placeholder="Password" class="form-control"><br>
+                        <input type="password" name="password2" placeholder="Confirm Password" class="form-control"><br>
+
+                    </div>
+                    <div class="link">
+                        <button type="submit" class="btn btn-primary">ADD USER</button>
+                        <a href="{% url 'admin-dash' %}">back</a>
+                    </div>
+                </div>
+
+                <div>
+                    {% for message in messages %}
+                    <h3 style="color: red; margin-top: 30px"> {{message}} </h3>
+                    {% endfor %}
+                </div>
+
+
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{% block script %}
+<script>
+
+    $(document).ready(function () {
+        $("#login-form").validate({
+            rules: {
+                first_name: {
+                    required: true,
+
+                },
+                last_name: {
+                    required: true,
+                },
+
+                username: {
+                    required: true,
+                },
+
+                email: {
+                    required: true,
+                },
+
+                password1: {
+                    required: true,
+                },
+
+                password2: {
+                    required: true,
+                },
+
+            }
+        })
+    })
+</script>
+
+{% endblock %}
+{% endblock %}
