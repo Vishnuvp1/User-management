@@ -59,6 +59,10 @@ def login(request):
 
 def register(request):
 
+    if request.user.is_authenticated:
+
+        return redirect('home')
+
     if request.method == 'POST':
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
