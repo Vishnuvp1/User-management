@@ -7,59 +7,58 @@ from accounts.forms import UserUpdate
 
 # Create your views here.
 
-@login_required(login_url='login') 
 def home(request):
-    if request.user.is_superuser:
-        return redirect('admin-dash')
-    else:
+    
+    if request.session.has_key('log'):
         return render(request, 'home.html')
+    else:
+        return redirect('login')
 
 
 def login(request):
-    
-    
-    if request.user.is_authenticated:
-
+    if request.session.has_key('log'):
         return redirect('home')
+    else:
 
 
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        if request.method == 'POST':
+            username = request.POST['username']
+            password = request.POST['password']
 
-        try:
-            user = User.objects.get(username=username)
-        
-            if not user.is_active:
-                messages.info(request,'Access Denied')
-                return redirect('login')
-        except:
-            pass
+            try:
+                user = User.objects.get(username=username)
+            
+                if not user.is_active:
 
-        user = auth.authenticate(username=username,password=password)
-        
-        if user is not None:
+                    messages.info(request,'Access Denied')
+                    return redirect('login')
+            except:
+                pass
 
-            if user.is_superuser:
+            user = auth.authenticate(username=username,password=password)
+            
+            if user is not None:
+
+                if user.is_superuser:
+                    messages.info(request,'Invalid Credentials')
+                    return redirect('login')
+
+                request.session['log']= 'log'
+
+                return redirect('home')
+
+            else:
                 messages.info(request,'Invalid Credentials')
                 return redirect('login')
 
-            auth.login(request, user)
-
-            return redirect('home')
-
         else:
-            messages.info(request,'Invalid Credentials')
-            return redirect('login')
-
-    else:
-        return render(request,'login.html')
+            return render(request,'login.html')
         
 
 
 def register(request):
 
-    if request.user.is_authenticated:
+    if request.session.has_key('log'):
 
         return redirect('home')
 
@@ -95,12 +94,9 @@ def register(request):
 
 def logout(request):
 
-    auth.logout(request)
-    return redirect('home')
+    del request.session['log']
+    return redirect('login')
     
-
-
-
 
 def admin(request):
     
@@ -138,7 +134,7 @@ def admin(request):
 def admindash(request):
     
 
-    users = User.objects.all()
+    users = User.objects.all().order_by('id')
 
     context = {
         'users' : users
@@ -160,14 +156,22 @@ def delete(request,pk):
 
 def update(request,pk):
 
+    
+
     user = User.objects.get(id=pk)
 
     form = UserUpdate(instance=user)
 
+    context = {'form':form}
+
     if request.method == 'POST':
         form = UserUpdate(request.POST, instance=user)
         if form.is_valid():
-            form.save()
+            try:
+                form.save()
+            except:
+                messages.info(request, "Email Already Exist")
+                return render(request, 'update.html', context)
             return redirect('admin-dash')
 
     context = {'form':form}
@@ -185,6 +189,7 @@ def blockuser(request,pk):
     user = User.objects.get(id=pk)
     user.is_active = False
     user.save()
+    # del request.session['log'] 
     return redirect('admin-dash')
 
 def unblockuser(request,pk):

@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 
 class UserUpdate(forms.ModelForm):
     username = forms.CharField(required=True, max_length=150, widget=forms.TextInput(attrs={'placeholder': 'Enter your Username'}))
+    
 
 
     class Meta:
