@@ -144,14 +144,9 @@ def admindash(request):
 
 
 def delete(request,pk):
-    
-
-    
+       
     User.objects.get(id=pk).delete()
     return redirect('admin-dash')
-
-   
-
 
 
 def update(request,pk):
